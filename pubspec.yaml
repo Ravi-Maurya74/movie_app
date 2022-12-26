@@ -39,6 +39,8 @@ dependencies:
   http: ^0.13.5
   cached_network_image: ^3.2.3
   faded_widget: ^2.0.0
+  url_launcher: ^6.1.7
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:

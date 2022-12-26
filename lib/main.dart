@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/pages/login_page.dart';
 import 'package:movie_app/pages/movie_page.dart';
 import 'package:movie_app/pages/register_page.dart';
+import 'package:movie_app/pages/review_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,15 +26,17 @@ class MyApp extends StatelessWidget {
           titleMedium: const TextStyle(fontSize: 19),
         ),
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: Colors.white70
+          secondary: Colors.white70,
+          // primary: Colors.white70,
         ),
         scaffoldBackgroundColor: const Color.fromRGBO(24, 25, 32, 1),
       ),
-      home: MoviePage(),
+      home: ReviewPage(),
       routes: {
         // '/': (context) => LoginPage(),
         RegisterPage.routeName: (context) => RegisterPage(),
         MoviePage.routeName: (context) => MoviePage(),
+        ReviewPage.routeName:(context) => ReviewPage(),
       },
     );
   }

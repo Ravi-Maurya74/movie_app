@@ -1,6 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:movie_app/widgets/extended_fab.dart';
 import 'package:movie_app/widgets/faded_image.dart';
 import 'package:movie_app/widgets/fade_on_scroll.dart';
 
@@ -77,13 +80,29 @@ class MoviePage extends StatelessWidget {
                 FadedImage(
                   url: data['cardImageUrl'] as String,
                 ),
-                // Positioned(
-                //   child: FadeOnScroll(
-                //       scrollController: scrollController,
-                //       child: Text(data['title'] as String,style: Theme.of(context).textTheme.titleMedium,)),
-                //   top: 0,
-                //   left: 0,
-                // )
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: FadeOnScroll(
+                    scrollController: scrollController,
+                    child: Container(
+                      decoration: const BoxDecoration(boxShadow: [
+                        BoxShadow(
+                            color: Colors.black38,
+                            blurRadius: 5,
+                            offset: Offset(5, 5)),
+                        // BoxShadow(
+                        //     color: Colors.black38,
+                        //     blurRadius: 5,
+                        //     offset: Offset(5, -5)),
+                      ]),
+                      child: Text(
+                        data['title'] as String,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
             const SizedBox(
@@ -179,6 +198,39 @@ class MoviePage extends StatelessWidget {
                           actorList: data['director_name'] as List<dynamic>),
                       const SizedBox(
                         height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: ElevatedButton(
+                              child: const Padding(
+                                padding:
+                                    EdgeInsets.symmetric(vertical: 15),
+                                child: Text('Trailer'),
+                              ),
+                              onPressed: () {
+                                launchUrl(
+                                    Uri.parse(data["trailer_url"] as String),
+                                    mode: LaunchMode
+                                        .externalNonBrowserApplication);
+                              },
+                            ),
+                          )),
+                          Expanded(
+                              child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: ElevatedButton(
+                              child: const Padding(
+                                padding:
+                                    EdgeInsets.symmetric(vertical: 15),
+                                child: Text('Reviews'),
+                              ),
+                              onPressed: () {},
+                            ),
+                          )),
+                        ],
                       )
                     ],
                   ),
@@ -188,12 +240,10 @@ class MoviePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        // isExtended: false,
-        onPressed: () {},
-        label: Text('test'),
-        icon: Icon(Icons.edit_outlined),
-      ),
+      floatingActionButton: ExtendedFAB(
+          scrollController: scrollController,
+          label: 'Review',
+          iconData: Icons.edit_outlined),
     );
   }
 }
@@ -212,46 +262,53 @@ class ActorsListRow extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: (actorList)
-            .map((e) => Padding(
-                  padding: const EdgeInsets.only(right: 6, top: 8),
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: CachedNetworkImage(
-                            imageUrl: e['image'],
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Center(
-                              child: CircularProgressIndicator(
-                                  value: downloadProgress.progress),
+        children: [
+          ...(actorList)
+              .map((e) => Padding(
+                    padding: const EdgeInsets.only(right: 6, top: 8),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: CachedNetworkImage(
+                              imageUrl: e['image'],
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress),
+                              ),
+                              errorWidget: (context, url, error) {
+                                return Image.asset('default.jpg');
+                              },
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.cover,
                             ),
-                            errorWidget: (context, url, error) {
-                              return Image.asset('default.jpg');
-                            },
-                            height: 100,
-                            width: 100,
-                            fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        width: 105,
-                        child: Text(
-                          e['name'],
-                          style: Theme.of(context).textTheme.bodySmall,
-                          textAlign: TextAlign.center,
+                        const SizedBox(
+                          height: 10,
                         ),
-                      )
-                    ],
-                  ),
-                ))
-            .toList(),
+                        SizedBox(
+                          width: 105,
+                          child: Text(
+                            e['name'],
+                            style: Theme.of(context).textTheme.bodySmall,
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ],
+                    ),
+                  ))
+              .toList(),
+          const CircleAvatar(
+            radius: 50,
+            backgroundColor: Colors.black12,
+            child: Icon(Icons.add),
+          )
+        ],
       ),
     );
   }

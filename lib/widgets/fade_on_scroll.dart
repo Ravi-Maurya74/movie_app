@@ -4,7 +4,7 @@ class FadeOnScroll extends StatefulWidget {
   final ScrollController scrollController;
   final Widget child;
 
-  FadeOnScroll(
+  const FadeOnScroll(
       {super.key,
       required this.scrollController,
       required this.child,
@@ -38,13 +38,10 @@ class _FadeOnScrollState extends State<FadeOnScroll> {
     setState(() {
       _offset = widget.scrollController.offset;
     });
-    print(_offset);
   }
 
   double _calculateOpacity() {
-    print('Inside opacitt');
     double oldValue = (_offset / 90).clamp(0, 1).toDouble();
-    print(oldValue);
     if (oldValue < 0.39) return 0.0;
     double oldMin = 0.39;
     double oldMax = 0.67;
@@ -53,7 +50,6 @@ class _FadeOnScrollState extends State<FadeOnScroll> {
     double oldRange = oldMax - oldMin;
     double newRange = newMax - newMin;
     double newValue = (((oldValue - oldMin) * newRange) / oldRange) + newMin;
-    print(newValue);
     return newValue.clamp(0.0, 1.0).toDouble();
   }
 
