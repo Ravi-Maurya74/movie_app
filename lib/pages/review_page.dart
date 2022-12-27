@@ -65,7 +65,6 @@ class ReviewPage extends StatelessWidget {
         child: Column(
           children: [
             const CustomAppbar(),
-            // ReviewCard(data: data)
             Expanded(
                 child: ListView.builder(
               itemBuilder: (context, index) => ReviewCard(data: data[index]),
@@ -219,7 +218,9 @@ class CustomAppbar extends StatelessWidget {
                     color: Colors.white10,
                     borderRadius: BorderRadius.circular(15)),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   icon: const Icon(Icons.arrow_back),
                 ),
               ),

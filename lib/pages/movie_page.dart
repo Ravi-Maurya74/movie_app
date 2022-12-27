@@ -79,6 +79,8 @@ class MoviePage extends StatelessWidget {
               children: [
                 FadedImage(
                   url: data['cardImageUrl'] as String,
+                  height: 300,
+                  fadeHeight: 100,
                 ),
                 Positioned(
                   top: 0,

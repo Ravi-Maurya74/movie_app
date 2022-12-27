@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/pages/filtered_movies.dart';
+import 'package:movie_app/pages/home_page.dart';
 import 'package:movie_app/pages/login_page.dart';
 import 'package:movie_app/pages/movie_page.dart';
 import 'package:movie_app/pages/register_page.dart';
@@ -25,18 +27,25 @@ class MyApp extends StatelessWidget {
           bodySmall: const TextStyle(fontSize: 13, color: Colors.white70),
           titleMedium: const TextStyle(fontSize: 19),
         ),
+        chipTheme: ChipThemeData(
+          backgroundColor: Colors.white.withOpacity(0.9),
+          selectedColor: Colors.amber,
+          disabledColor: Colors.white70,
+        ),
         colorScheme: ColorScheme.fromSwatch().copyWith(
           secondary: Colors.white70,
           // primary: Colors.white70,
         ),
         scaffoldBackgroundColor: const Color.fromRGBO(24, 25, 32, 1),
       ),
-      home: ReviewPage(),
+      home: FilteredMovies(),
       routes: {
         // '/': (context) => LoginPage(),
         RegisterPage.routeName: (context) => RegisterPage(),
         MoviePage.routeName: (context) => MoviePage(),
-        ReviewPage.routeName:(context) => ReviewPage(),
+        ReviewPage.routeName: (context) => ReviewPage(),
+        HomePage.routeName: (context) => HomePage(),
+        FilteredMovies.routeName: (context) => FilteredMovies(),
       },
     );
   }
