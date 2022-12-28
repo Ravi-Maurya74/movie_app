@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
           bodyMedium: const TextStyle(fontSize: 18, color: Colors.white70),
           bodySmall: const TextStyle(fontSize: 13, color: Colors.white70),
           titleMedium: const TextStyle(fontSize: 19),
+          titleSmall: const TextStyle(fontSize: 15),
         ),
         chipTheme: ChipThemeData(
           backgroundColor: Colors.white.withOpacity(0.9),
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color.fromRGBO(24, 25, 32, 1),
       ),
-      home: FilteredMovies(),
+      home: HomePage(),
       routes: {
         // '/': (context) => LoginPage(),
         RegisterPage.routeName: (context) => RegisterPage(),

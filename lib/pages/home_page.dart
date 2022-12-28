@@ -3,7 +3,8 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:movie_app/widgets/animated_menu.dart';
+import 'package:movie_app/widgets/custom_text_field2.dart';
 import 'package:movie_app/widgets/faded_image.dart';
 
 class HomePage extends StatelessWidget {
@@ -298,6 +299,7 @@ class HomePage extends StatelessWidget {
       "imageUrl": "https://m.media-amazon.com/images/I/A1JVqNMI7UL._SL1500_.jpg"
     }
   ];
+  TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -306,6 +308,30 @@ class HomePage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                        icon: Icon(Icons.menu)),
+                    // SizedBox(
+                    //   width: 20,
+                    // ),
+                    Expanded(
+                        child: CustomTextField2(
+                            textEditingController: textEditingController,
+                            label: 'Search',
+                            iconData: Icons.search)),
+                    // SizedBox(
+                    //   width: 20,
+                    // ),
+                    // Icon(Icons.video_camera_back_sharp)
+                  ],
+                ),
+              ),
               CenterImage(data: topRated.sublist(0, min(topRated.length, 5))),
               Container(
                 margin:
@@ -325,6 +351,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
+      drawer: Drawer(),
     );
   }
 }

@@ -120,7 +120,7 @@ class MoviePage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.star,
                             color: Colors.amber,
                           ),
@@ -128,7 +128,7 @@ class MoviePage extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            (data['rating'] as double).toString(),
+                            (data['rating'] as double).toStringAsFixed(1),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
