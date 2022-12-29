@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         MoviePage.routeName: (context) => MoviePage(),
         ReviewPage.routeName: (context) => ReviewPage(),
         HomePage.routeName: (context) => HomePage(),
-        FilteredMovies.routeName: (context) => FilteredMovies(),
+        FilteredMovies.routeName: (context) => const FilteredMovies(),
       },
     );
   }

@@ -1,14 +1,18 @@
+import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:movie_app/helpers/networking.dart';
+import 'package:movie_app/pages/filtered_movies.dart';
+import 'package:movie_app/pages/movie_page.dart';
 
 class CustomTextField2 extends StatelessWidget {
-  final TextEditingController textEditingController;
   final String label;
-  final IconData iconData;
   final String hint;
-  const CustomTextField2({
-    required this.textEditingController,
+  final TextEditingController textEditingController = TextEditingController();
+  CustomTextField2({
     required this.label,
-    required this.iconData,
     this.hint = '',
     Key? key,
   }) : super(key: key);
@@ -26,22 +30,88 @@ class CustomTextField2 extends StatelessWidget {
         children: [
           Container(
               margin: const EdgeInsets.only(right: 10),
-              child: Icon(
-                iconData,
-                color: Colors.white.withOpacity(0.7),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                enableFeedback: true,
+                alignment: Alignment.centerLeft,
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.white.withOpacity(0.7),
+                ),
+                onPressed: () async {
+                  if (textEditingController.text.length > 2) {
+                    var results = await NetworkHelper().postData(
+                        url: 'searchMovies/',
+                        jsonMap: {"title": textEditingController.text});
+                    // print(textEditingController.value);
+                    Navigator.pushNamed(context, FilteredMovies.routeName,
+                        arguments: jsonDecode(results.body));
+                  }
+                },
               )),
           Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                // label: Text(label),
-                hintText: hint,
-                // labelStyle: TextStyle(color: Colors.white),
-              ),
-              controller: textEditingController,
-              autofillHints: gethints(label),
+              child: TypeAheadField(
+            hideOnLoading: true,
+            minCharsForSuggestions: 2,
+            getImmediateSuggestions: false,
+            noItemsFoundBuilder: (context) => const ListTile(
+              title: Text('No Movie found'),
             ),
-          ),
+            textFieldConfiguration: TextFieldConfiguration(
+                controller: textEditingController,
+                autofocus: false,
+                decoration: const InputDecoration(border: InputBorder.none)),
+            suggestionsCallback: (pattern) async {
+              var results = await NetworkHelper()
+                  .postData(url: 'searchMovies/', jsonMap: {"title": pattern});
+              // print(jsonDecode(results.body));
+              return jsonDecode(results.body) as List<dynamic>;
+            },
+            itemBuilder: (context, itemData) {
+              return ListTile(
+                leading: CachedNetworkImage(
+                  imageUrl: itemData['imageUrl'],
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress),
+                  ),
+                  errorWidget: (context, url, error) {
+                    return const Icon(Icons.person);
+                  },
+                  height: 70,
+                  width: 70,
+                  fit: BoxFit.contain,
+                ),
+                title: Text(
+                  itemData['title'] as String,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                subtitle: Text(
+                  (itemData['year'] as int).toString(),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              );
+            },
+            onSuggestionSelected: (suggestion) {
+              Navigator.pushNamed(context, MoviePage.routeName,
+                  arguments: suggestion);
+            },
+          )
+
+              // TextField(
+              //   decoration: InputDecoration(
+              //     border: InputBorder.none,
+              //     // label: Text(label),
+              //     hintText: hint,
+              //     // labelStyle: TextStyle(color: Colors.white),
+              //   ),
+              //   controller: textEditingController,
+              //   autofillHints: gethints(label),
+              // ),
+              ),
         ],
       ),
     );

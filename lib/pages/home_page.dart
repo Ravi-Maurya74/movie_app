@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_app/helpers/networking.dart';
+import 'package:movie_app/pages/filtered_movies.dart';
+import 'package:movie_app/pages/movie_page.dart';
 import 'package:movie_app/widgets/animated_menu.dart';
 import 'package:movie_app/widgets/custom_text_field2.dart';
 import 'package:movie_app/widgets/faded_image.dart';
@@ -299,7 +303,6 @@ class HomePage extends StatelessWidget {
       "imageUrl": "https://m.media-amazon.com/images/I/A1JVqNMI7UL._SL1500_.jpg"
     }
   ];
-  TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -322,9 +325,8 @@ class HomePage extends StatelessWidget {
                     // ),
                     Expanded(
                         child: CustomTextField2(
-                            textEditingController: textEditingController,
                             label: 'Search',
-                            iconData: Icons.search)),
+                            )),
                     // SizedBox(
                     //   width: 20,
                     // ),
@@ -375,21 +377,35 @@ class RowMovieWidget extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Row(
             children: data
-                .map((e) => Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: CachedNetworkImage(
-                        imageUrl: e["imageUrl"] as String,
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) => Center(
-                          child: CircularProgressIndicator(
-                              value: downloadProgress.progress),
+                .map((e) => GestureDetector(
+                      onTap: () => Navigator.pushNamed(
+                          context, MoviePage.routeName,
+                          arguments: e),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            // margin: const EdgeInsets.symmetric(
+                            //     horizontal: 10, vertical: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: CachedNetworkImage(
+                              imageUrl: e["imageUrl"] as String,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress),
+                              ),
+                              errorWidget: (context, url, error) {
+                                return Image.asset('default.jpg');
+                              },
+                              height: 300,
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
                         ),
-                        errorWidget: (context, url, error) {
-                          return Image.asset('default.jpg');
-                        },
-                        height: 300,
-                        fit: BoxFit.fitHeight,
                       ),
                     ))
                 .toList(),
@@ -426,17 +442,29 @@ class _SelectorChipsState extends State<SelectorChips> {
       children: [
         Row(
           children: [
-            Text('Choose your mood:'),
-            Spacer(),
+            const Text('Choose your mood:'),
+            const Spacer(),
             TextButton(
-                onPressed: () {},
-                child: Text(
+                onPressed: () async {
+                  List<int> ans = [];
+                  _selected.forEach((key, value) {
+                    if (value) ans.add(key);
+                  });
+                  // print(ans);
+                  var filteredMovies = await NetworkHelper().postData(
+                      url: 'filteredMovies/', jsonMap: {"filters": ans});
+                  // print(jsonDecode(filteredMovies.body));
+                  if (!mounted) return;
+                  Navigator.pushNamed(context, FilteredMovies.routeName,
+                      arguments: jsonDecode(filteredMovies.body));
+                },
+                child: const Text(
                   'Go',
                   style: TextStyle(fontSize: 20),
                 ))
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Wrap(

@@ -3,68 +3,17 @@ import 'package:flutter/material.dart';
 
 class ReviewPage extends StatelessWidget {
   static const routeName = '/review';
-  final data = [
-    {
-      "user": 2,
-      "name": "Priyanshu Yadav",
-      "profile_pic_url":
-          "https://drive.google.com/uc?export=view&id=1jJHYtL4z5aNGcqNdZnOjX_-yAp5v3jjp",
-      "movie": 1,
-      "description": "Truly one of the best cbm.",
-      "rating": 9.4,
-      "date": "2022-12-22",
-      "upvote": 0,
-      "upvoted_by": []
-    },
-    {
-      "user": 1,
-      "name": "Viral Verma",
-      "profile_pic_url":
-          "https://drive.google.com/uc?export=view&id=1j8nINlkoNxe_2LfkrlBx1VvOHm5HRxE9",
-      "movie": 1,
-      "description": "Very depressing.",
-      "rating": 9.0,
-      "date": "2022-12-22",
-      "upvote": 0,
-      "upvoted_by": []
-    },
-    {
-      "user": 3,
-      "name": "Ravi Maurya",
-      "profile_pic_url":
-          "https://drive.google.com/uc?export=view&id=1j8nINlkoNxe_2LfkrlBx1VvOHm5HRxE9",
-      "movie": 1,
-      "description":
-          "A masterpiece within or outside the superhero & comic book genre it explores. Heath Ledger delivers one of the most iconic performances in film history.",
-      "rating": 9.4,
-      "date": "2022-12-25",
-      "upvote": 0,
-      "upvoted_by": []
-    },
-    {
-      "user": 6,
-      "name": "new",
-      "profile_pic_url":
-          "https://drive.google.com/uc?export=view&id=1jJHYtL4z5aNGcqNdZnOjX_-yAp5v3jjp",
-      "movie": 1,
-      "description":
-          "This is the best comic book movie of all time. A dark, gritty, and realistic look on how superheroes would act and how they can remain unidentified. With great lead performances by Christian Bale (Batman) and Heath Ledger (The Joker) I believe this is if not the best comic book movie and a competitor for the top spot in crime thrillers as well. Deserves its fantastic reviews and box office totals.",
-      "rating": 9.3,
-      "date": "2022-12-25",
-      "upvote": 0,
-      "upvoted_by": []
-    }
-  ];
   ReviewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final data = ModalRoute.of(context)!.settings.arguments as List<dynamic>;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(left: 12, right: 12, top: 50),
         child: Column(
           children: [
-            const CustomAppbar(),
+            CustomAppbar(count: data.length),
             Expanded(
                 child: ListView.builder(
               itemBuilder: (context, index) => ReviewCard(data: data[index]),
@@ -83,7 +32,7 @@ class ReviewCard extends StatelessWidget {
     required this.data,
   }) : super(key: key);
 
-  final Map<String, Object> data;
+  final Map<String, dynamic> data;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +49,8 @@ class ReviewCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
                   child: CachedNetworkImage(
-                    imageUrl: data['profile_pic_url'] as String,
+                    imageUrl:
+                        formatProfilePicUrl(data['profile_pic_url'] as String),
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
                       child: CircularProgressIndicator(
@@ -203,8 +153,10 @@ class ReviewCard extends StatelessWidget {
 
 class CustomAppbar extends StatelessWidget {
   const CustomAppbar({
+    required this.count,
     Key? key,
   }) : super(key: key);
+  final int count;
 
   @override
   Widget build(BuildContext context) {
@@ -234,13 +186,23 @@ class CustomAppbar extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
-              '700 Reviews',
+              '$count Reviews',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
-        Spacer(),
+        const Spacer(),
       ],
     );
   }
+}
+
+String formatProfilePicUrl(String url) {
+  if (url.contains('drive.google.com')) {
+    url = url.replaceFirst('file/d/', 'uc?export=view&id=');
+    int end = url.indexOf('/view');
+    // print(url.substring(0, end));
+    return url.substring(0, end);
+  }
+  return url;
 }
