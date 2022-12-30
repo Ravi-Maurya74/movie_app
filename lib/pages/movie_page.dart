@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:movie_app/helpers/networking.dart';
+import 'package:movie_app/pages/add_cast_page.dart';
 import 'package:movie_app/pages/review_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -137,7 +138,10 @@ class MoviePage extends StatelessWidget {
                         height: 12,
                       ),
                       ActorsListRow(
-                          actorList: data['actor_name'] as List<dynamic>),
+                        actorList: data['actor_name'] as List<dynamic>,
+                        isDirector: false,
+                        movieId: data['id'],
+                      ),
                       const SizedBox(
                         height: 12,
                       ),
@@ -149,7 +153,10 @@ class MoviePage extends StatelessWidget {
                         height: 12,
                       ),
                       ActorsListRow(
-                          actorList: data['director_name'] as List<dynamic>),
+                        actorList: data['director_name'] as List<dynamic>,
+                        isDirector: true,
+                        movieId: data['id'],
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -208,66 +215,101 @@ class MoviePage extends StatelessWidget {
   }
 }
 
-class ActorsListRow extends StatelessWidget {
-  const ActorsListRow({
-    Key? key,
-    required this.actorList,
-  }) : super(key: key);
+class ActorsListRow extends StatefulWidget {
+  const ActorsListRow(
+      {Key? key,
+      required this.actorList,
+      required this.isDirector,
+      required this.movieId})
+      : super(key: key);
 
   final List<dynamic> actorList;
+  final bool isDirector;
+  final int movieId;
 
+  @override
+  State<ActorsListRow> createState() => _ActorsListRowState();
+}
+
+class _ActorsListRowState extends State<ActorsListRow> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ...(actorList)
-              .map((e) => Padding(
-                    padding: const EdgeInsets.only(right: 6, top: 8),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 50,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: CachedNetworkImage(
-                              imageUrl: e['image'],
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Center(
-                                child: CircularProgressIndicator(
-                                    value: downloadProgress.progress),
-                              ),
-                              errorWidget: (context, url, error) {
-                                return Image.asset('default.jpg');
-                              },
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: 105,
-                          child: Text(
-                            e['name'],
-                            style: Theme.of(context).textTheme.bodySmall,
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      ],
-                    ),
+          ...(widget.actorList)
+              .map((e) => SingleCast(
+                    e: e,
                   ))
               .toList(),
-          const CircleAvatar(
+          CircleAvatar(
             radius: 50,
             backgroundColor: Colors.black12,
-            child: Icon(Icons.add),
+            child: IconButton(
+              onPressed: () async {
+                var data =
+                    await Navigator.pushNamed(context, AddCast.routeName);
+                    setState(() {
+                widget.actorList.add(data);
+                      
+                    });
+              },
+              icon: const Icon(Icons.add),
+              splashRadius: 50,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class SingleCast extends StatelessWidget {
+  const SingleCast({
+    required this.e,
+    Key? key,
+  }) : super(key: key);
+  final dynamic e;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 6, top: 8),
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 50,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: CachedNetworkImage(
+                imageUrl: e['image'],
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                  child: CircularProgressIndicator(
+                      value: downloadProgress.progress),
+                ),
+                errorWidget: (context, url, error) {
+                  return Image.asset('default.jpg');
+                },
+                height: 100,
+                width: 100,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: 105,
+            child: Text(
+              e['name'],
+              style: Theme.of(context).textTheme.bodySmall,
+              textAlign: TextAlign.center,
+            ),
           )
         ],
       ),

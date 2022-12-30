@@ -325,8 +325,8 @@ class HomePage extends StatelessWidget {
                     // ),
                     Expanded(
                         child: CustomTextField2(
-                            label: 'Search',
-                            )),
+                      label: 'Search',
+                    )),
                     // SizedBox(
                     //   width: 20,
                     // ),
@@ -546,34 +546,38 @@ class _CenterImageState extends State<CenterImage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        FadedImage(
-          height: 600,
-          url: widget.data[index]['imageUrl'] as String,
-          fadeHeight: 200,
-        ),
-        SizedBox(
-          height: 600,
-          child: Column(children: [
-            Spacer(),
-            Container(
-              child: Center(
-                child: Text(
-                  formatGenres(
-                    widget.data[index]['genres'] as List<String>,
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, MoviePage.routeName,
+          arguments: widget.data[index]),
+      child: Stack(
+        children: [
+          FadedImage(
+            height: 600,
+            url: widget.data[index]['imageUrl'] as String,
+            fadeHeight: 200,
+          ),
+          SizedBox(
+            height: 600,
+            child: Column(children: [
+              const Spacer(),
+              Container(
+                child: Center(
+                  child: Text(
+                    formatGenres(
+                      widget.data[index]['genres'] as List<String>,
+                    ),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ]),
-        )
-      ],
+              const SizedBox(
+                height: 20,
+              ),
+            ]),
+          )
+        ],
+      ),
     );
   }
 }

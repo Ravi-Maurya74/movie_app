@@ -84,7 +84,7 @@ class ReviewCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Container(
                 decoration: BoxDecoration(
                     color: Colors.white10,

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/pages/add_cast_page.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/pages/home_page.dart';
 import 'package:movie_app/pages/login_page.dart';
 import 'package:movie_app/pages/movie_page.dart';
 import 'package:movie_app/pages/register_page.dart';
 import 'package:movie_app/pages/review_page.dart';
+import 'package:get_storage/get_storage.dart';
 
 void main() {
+  
   runApp(const MyApp());
 }
 
@@ -47,6 +50,7 @@ class MyApp extends StatelessWidget {
         ReviewPage.routeName: (context) => ReviewPage(),
         HomePage.routeName: (context) => HomePage(),
         FilteredMovies.routeName: (context) => const FilteredMovies(),
+        AddCast.routeName:(context) => AddCast(),
       },
     );
   }
