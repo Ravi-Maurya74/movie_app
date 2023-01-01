@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:http/http.dart';
 import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/pages/movie_page.dart';
@@ -95,9 +96,11 @@ class CustomTextField2 extends StatelessWidget {
                 ),
               );
             },
-            onSuggestionSelected: (suggestion) {
+            onSuggestionSelected: (suggestion) async{
+              Response movieData = await NetworkHelper()
+                  .getData(url: 'movieDetail/${suggestion['id']}');
               Navigator.pushNamed(context, MoviePage.routeName,
-                  arguments: suggestion);
+                  arguments: jsonDecode(movieData.body));
             },
           )
 

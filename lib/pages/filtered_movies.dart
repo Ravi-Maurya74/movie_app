@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:movie_app/pages/movie_page.dart';
+import 'package:movie_app/helpers/networking.dart';
 
 class FilteredMovies extends StatelessWidget {
   static const routeName = '/filtered';
@@ -47,8 +51,11 @@ class MovieCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () =>
-          Navigator.pushNamed(context, MoviePage.routeName, arguments: data),
+      onTap: () async{
+        Response movieData = await NetworkHelper().getData(
+                            url: 'movieDetail/${data['id']}');
+        Navigator.pushNamed(context, MoviePage.routeName, arguments: jsonDecode(movieData.body));
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
         child: Row(

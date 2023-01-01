@@ -6,6 +6,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/add_cast_page.dart';
 import 'package:movie_app/pages/review_page.dart';
+import 'package:movie_app/providers/movie.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:movie_app/widgets/extended_fab.dart';
@@ -19,7 +21,8 @@ class MoviePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)!.settings.arguments as dynamic;
+    final movie = Provider.of<Movie>(context, listen: false);
+    final data = movie.data;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -82,7 +85,7 @@ class MoviePage extends StatelessWidget {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '  |  723',
+                            '  |  ${(data['number_of_reviews'] as int).toString()}',
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const Spacer(),
@@ -252,10 +255,9 @@ class _ActorsListRowState extends State<ActorsListRow> {
               onPressed: () async {
                 var data =
                     await Navigator.pushNamed(context, AddCast.routeName);
-                    setState(() {
-                widget.actorList.add(data);
-                      
-                    });
+                setState(() {
+                  widget.actorList.add(data);
+                });
               },
               icon: const Icon(Icons.add),
               splashRadius: 50,

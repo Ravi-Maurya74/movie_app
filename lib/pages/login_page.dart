@@ -2,17 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:movie_app/helpers/networking.dart';
+import 'package:movie_app/pages/home_page.dart';
 import 'package:movie_app/pages/register_page.dart';
+import 'package:movie_app/providers/user.dart';
 
 import 'package:movie_app/widgets/custom_text_field.dart';
 import 'package:movie_app/widgets/custom_button.dart';
 import 'package:movie_app/widgets/custom_password_field.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:provider/provider.dart';
 
 import 'package:http/http.dart';
- 
+
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final box = GetStorage();
   LoginPage({super.key});
 
   @override
@@ -75,7 +80,26 @@ class LoginPage extends StatelessWidget {
                         return;
                       }
                       var data = jsonResponse['data'];
-                      print(data);
+                      // print(data);
+                      Provider.of<User>(context, listen: false).update(
+                          id: data['id'],
+                          email: data['email'],
+                          password: data['password'],
+                          name: data['name'],
+                          profilePicUrl: data['profile_pic_url']);
+                      Response genres =
+                          await NetworkHelper().getData(url: 'genre/');
+                      Response topRated =
+                          await NetworkHelper().getData(url: 'topRatedMovies/');
+                      Response mostUpvoted = await NetworkHelper()
+                          .getData(url: 'mostUpvotedMovies/');
+                      // ignore: use_build_context_synchronously
+                      Navigator.pushNamed(context, HomePage.routeName,
+                          arguments: {
+                            "genres": jsonDecode(genres.body),
+                            "topRated":jsonDecode(topRated.body),
+                            "mostUpvoted": jsonDecode(mostUpvoted.body),
+                          });
                     }
                   }),
               const SizedBox(
