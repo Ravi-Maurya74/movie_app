@@ -4,13 +4,16 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:http/http.dart';
 import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/pages/movie_page.dart';
+import 'package:movie_app/providers/user.dart';
 import 'package:movie_app/widgets/animated_menu.dart';
 import 'package:movie_app/widgets/custom_text_field2.dart';
 import 'package:movie_app/widgets/faded_image.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   static const routeName = '/home';
@@ -94,10 +97,15 @@ class RowMovieWidget extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Row(
             children: data
-                .map((e) => GestureDetector(
-                      onTap: () async{
-                        Response movieData = await NetworkHelper().getData(
-                            url: 'movieDetail/${e['id']}');
+                .map((e) => Bounceable(
+                      onTap: () async {
+                        Response movieData = await NetworkHelper().postData(
+                            url: 'movieDetails/',
+                            jsonMap: {
+                              "movie_id": e['id'],
+                              "user_id":
+                                  Provider.of<User>(context, listen: false).id
+                            });
                         Navigator.pushNamed(context, MoviePage.routeName,
                             arguments: jsonDecode(movieData.body));
                       },
@@ -268,8 +276,11 @@ class _CenterImageState extends State<CenterImage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        Response movieData = await NetworkHelper()
-            .getData(url: 'movieDetail/${widget.data[index]['id']}');
+        Response movieData =
+            await NetworkHelper().postData(url: 'movieDetails/', jsonMap: {
+          "movie_id": widget.data[index]['id'],
+          "user_id": Provider.of<User>(context, listen: false).id
+        });
         Navigator.pushNamed(context, MoviePage.routeName,
             arguments: jsonDecode(movieData.body));
       },

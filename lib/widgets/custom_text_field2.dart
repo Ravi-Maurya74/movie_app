@@ -7,6 +7,8 @@ import 'package:http/http.dart';
 import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/pages/movie_page.dart';
+import 'package:movie_app/providers/user.dart';
+import 'package:provider/provider.dart';
 
 class CustomTextField2 extends StatelessWidget {
   final String label;
@@ -98,7 +100,10 @@ class CustomTextField2 extends StatelessWidget {
             },
             onSuggestionSelected: (suggestion) async{
               Response movieData = await NetworkHelper()
-                  .getData(url: 'movieDetail/${suggestion['id']}');
+                  .postData(url: 'movieDetails/', jsonMap: {
+                "movie_id": suggestion['id'],
+                "user_id": Provider.of<User>(context, listen: false).id
+              });
               Navigator.pushNamed(context, MoviePage.routeName,
                   arguments: jsonDecode(movieData.body));
             },

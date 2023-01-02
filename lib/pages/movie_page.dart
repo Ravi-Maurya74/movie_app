@@ -7,6 +7,7 @@ import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/add_cast_page.dart';
 import 'package:movie_app/pages/review_page.dart';
 import 'package:movie_app/providers/movie.dart';
+import 'package:movie_app/providers/user.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -89,18 +90,7 @@ class MoviePage extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const Spacer(),
-                          Icon(Icons.thumb_up_outlined),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(Icons.thumb_down_outlined),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(Icons.bookmark_add_outlined),
-                          SizedBox(
-                            width: 5,
-                          ),
+                          LikeBookmarkWidget(),
                         ],
                       ),
                       const SizedBox(
@@ -141,7 +131,6 @@ class MoviePage extends StatelessWidget {
                         height: 12,
                       ),
                       ActorsListRow(
-                        actorList: data['actor_name'] as List<dynamic>,
                         isDirector: false,
                         movieId: data['id'],
                       ),
@@ -156,7 +145,6 @@ class MoviePage extends StatelessWidget {
                         height: 12,
                       ),
                       ActorsListRow(
-                        actorList: data['director_name'] as List<dynamic>,
                         isDirector: true,
                         movieId: data['id'],
                       ),
@@ -218,32 +206,52 @@ class MoviePage extends StatelessWidget {
   }
 }
 
-class ActorsListRow extends StatefulWidget {
+class LikeBookmarkWidget extends StatelessWidget {
+  const LikeBookmarkWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final movie = Provider.of<Movie>(context);
+    final user = Provider.of<User>(context, listen: false);
+    return Row(
+      children: [
+        IconButton(
+            onPressed: () => movie.toggleLike(user.id),
+            icon: movie.data['upvoted']
+                ? const Icon(Icons.thumb_up_alt)
+                : const Icon(Icons.thumb_up_alt_outlined)),
+        IconButton(
+            onPressed: () => movie.toggleBookmark(user.id),
+            icon: movie.data['bookmarked']
+                ? const Icon(Icons.bookmark_add)
+                : const Icon(Icons.bookmark_add_outlined)),
+      ],
+    );
+  }
+}
+
+class ActorsListRow extends StatelessWidget {
   const ActorsListRow(
-      {Key? key,
-      required this.actorList,
-      required this.isDirector,
-      required this.movieId})
+      {Key? key, required this.isDirector, required this.movieId})
       : super(key: key);
 
-  final List<dynamic> actorList;
   final bool isDirector;
   final int movieId;
 
   @override
-  State<ActorsListRow> createState() => _ActorsListRowState();
-}
-
-class _ActorsListRowState extends State<ActorsListRow> {
-  @override
   Widget build(BuildContext context) {
+    final movie = Provider.of<Movie>(context);
+    final List<dynamic> actorList =
+        isDirector ? movie.data['director_name'] : movie.data['actor_name'];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ...(widget.actorList)
+          ...(actorList)
               .map((e) => SingleCast(
                     e: e,
                   ))
@@ -255,9 +263,12 @@ class _ActorsListRowState extends State<ActorsListRow> {
               onPressed: () async {
                 var data =
                     await Navigator.pushNamed(context, AddCast.routeName);
-                setState(() {
-                  widget.actorList.add(data);
-                });
+                if (data == null) return;
+                if (isDirector) {
+                  movie.addDirector(data);
+                } else {
+                  movie.addActor(data);
+                }
               },
               icon: const Icon(Icons.add),
               splashRadius: 50,

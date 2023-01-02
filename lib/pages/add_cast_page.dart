@@ -26,19 +26,74 @@ class _AddCastState extends State<AddCast> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Column(
-          children: [
-            const CustomAppbar(),
-            Expanded(
-                child: Column(
-              children: [
-                SearchWidget(updateCallback: updateCallback),
-                ResultWidget(data: data)
-              ],
-            )),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const CustomAppbar(),
+              Column(
+                children: [
+                  SearchWidget(updateCallback: updateCallback),
+                  ResultWidget(data: data),
+                  // SizedBox(
+                  //   height: 100,
+                  // ),
+                  CreateNewCast()
+                ],
+              ),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class CreateNewCast extends StatelessWidget {
+  const CreateNewCast({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                  width: 200,
+                  child: Text(
+                    'Cannot find in database?',
+                    textAlign: TextAlign.left,
+                  )),
+              ElevatedButton(onPressed: () {}, child: Text('Add to database'))
+            ],
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Note - ',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Flexible(
+                child: Text(
+                  'Before adding new cast to database, please make sure that the cast is not already present in database.',
+                  style: Theme.of(context).textTheme.titleSmall,
+                  textAlign: TextAlign.justify,
+                ),
+              )
+            ],
+          )
+        ],
       ),
     );
   }
@@ -56,7 +111,9 @@ class ResultWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: (data == null)
-          ? null
+          ? SizedBox(
+              height: 200,
+            )
           : Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Row(
