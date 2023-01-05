@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:movie_app/pages/add_to_database.dart';
 
 import '../helpers/networking.dart';
 
@@ -71,7 +72,11 @@ class CreateNewCast extends StatelessWidget {
                     'Cannot find in database?',
                     textAlign: TextAlign.left,
                   )),
-              ElevatedButton(onPressed: () {}, child: Text('Add to database'))
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AddToDatabase.routeName);
+                  },
+                  child: Text('Add to database'))
             ],
           ),
           const SizedBox(

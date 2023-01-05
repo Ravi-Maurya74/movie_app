@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart';
 
 class LoginPage extends StatelessWidget {
+  static const routeName = '/login';
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final box = GetStorage();
@@ -80,6 +81,7 @@ class LoginPage extends StatelessWidget {
                         return;
                       }
                       var data = jsonResponse['data'];
+                      box.write('user_id', data['id'] as int);
                       // print(data);
                       Provider.of<User>(context, listen: false).update(
                           id: data['id'],
@@ -87,17 +89,21 @@ class LoginPage extends StatelessWidget {
                           password: data['password'],
                           name: data['name'],
                           profilePicUrl: data['profile_pic_url']);
+                          final results = await Future.wait([
+                        NetworkHelper().getData(url: 'genre/'),
+                        NetworkHelper().getData(url: 'topRatedMovies/'),
+                        NetworkHelper().getData(url: 'mostUpvotedMovies/'),
+                      ]);
                       Response genres =
-                          await NetworkHelper().getData(url: 'genre/');
-                      Response topRated =
-                          await NetworkHelper().getData(url: 'topRatedMovies/');
-                      Response mostUpvoted = await NetworkHelper()
-                          .getData(url: 'mostUpvotedMovies/');
+                          results[0];
+                      Response topRated =results[1];
+                      Response mostUpvoted =results[2];
                       // ignore: use_build_context_synchronously
-                      Navigator.pushNamed(context, HomePage.routeName,
+                      Navigator.pushReplacementNamed(
+                          context, HomePage.routeName,
                           arguments: {
                             "genres": jsonDecode(genres.body),
-                            "topRated":jsonDecode(topRated.body),
+                            "topRated": jsonDecode(topRated.body),
                             "mostUpvoted": jsonDecode(mostUpvoted.body),
                           });
                     }

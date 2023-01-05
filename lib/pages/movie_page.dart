@@ -200,8 +200,8 @@ class MoviePage extends StatelessWidget {
       ),
       floatingActionButton: ExtendedFAB(
           scrollController: scrollController,
-          label: 'Review',
-          iconData: Icons.edit_outlined),
+          label: 'Comments',
+          iconData: Icons.message),
     );
   }
 }

@@ -1,13 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'package:http/http.dart';
+import 'package:movie_app/pages/home_page.dart';
+import 'package:movie_app/pages/login_page.dart';
+import 'package:movie_app/providers/user.dart';
 
 import 'package:movie_app/widgets/custom_text_field.dart';
 import 'package:movie_app/widgets/custom_button.dart';
 import 'package:movie_app/widgets/custom_password_field.dart';
 import 'package:movie_app/helpers/networking.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   static const routeName = '/register';
@@ -15,6 +20,7 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController profilePicController = TextEditingController();
+  final box = GetStorage();
   RegisterPage({super.key});
 
   @override
@@ -108,7 +114,29 @@ class RegisterPage extends StatelessWidget {
                       return;
                     }
                     var data = jsonDecode(response.body);
-                    print(data);
+                    box.write('user_id', data['id'] as int);
+                    // print(data);
+                    Provider.of<User>(context, listen: false).update(
+                        id: data['id'],
+                        email: data['email'],
+                        password: data['password'],
+                        name: data['name'],
+                        profilePicUrl: data['profile_pic_url']);
+                    final results = await Future.wait([
+                      NetworkHelper().getData(url: 'genre/'),
+                      NetworkHelper().getData(url: 'topRatedMovies/'),
+                      NetworkHelper().getData(url: 'mostUpvotedMovies/'),
+                    ]);
+                    Response genres = results[0];                                        
+                    Response topRated = results[1];
+                    Response mostUpvoted = results[2];
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacementNamed(context, HomePage.routeName,
+                        arguments: {
+                          "genres": jsonDecode(genres.body),
+                          "topRated": jsonDecode(topRated.body),
+                          "mostUpvoted": jsonDecode(mostUpvoted.body),
+                        });
                   }),
               const SizedBox(
                 height: 20,
@@ -122,7 +150,8 @@ class RegisterPage extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/');
+                      Navigator.pushReplacementNamed(
+                          context, LoginPage.routeName);
                     },
                     child: Text(
                       'Sign In',

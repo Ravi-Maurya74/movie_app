@@ -13,11 +13,13 @@ import 'package:movie_app/providers/user.dart';
 import 'package:movie_app/widgets/animated_menu.dart';
 import 'package:movie_app/widgets/custom_text_field2.dart';
 import 'package:movie_app/widgets/faded_image.dart';
+import 'package:movie_app/widgets/home_page_drawer.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   static const routeName = '/home';
   HomePage({super.key});
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class HomePage extends StatelessWidget {
     final topRated = data['topRated'];
     final mostUpvoted = data['mostUpvoted'];
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -37,9 +40,9 @@ class HomePage extends StatelessWidget {
                   children: [
                     IconButton(
                         onPressed: () {
-                          Scaffold.of(context).openDrawer();
+                          _scaffoldKey.currentState!.openDrawer();
                         },
-                        icon: Icon(Icons.menu)),
+                        icon: const Icon(Icons.menu)),
                     // SizedBox(
                     //   width: 20,
                     // ),
@@ -73,10 +76,12 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      drawer: Drawer(),
+      drawer: HomePageDrawer(),
     );
   }
 }
+
+
 
 class RowMovieWidget extends StatelessWidget {
   final List<dynamic> data;
