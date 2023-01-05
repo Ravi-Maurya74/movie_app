@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
 import 'package:movie_app/pages/home_page.dart';
 import 'package:movie_app/pages/login_page.dart';
+import 'package:movie_app/providers/loader.dart';
 import 'package:movie_app/providers/user.dart';
 
 import 'package:movie_app/widgets/custom_text_field.dart';
@@ -127,16 +128,11 @@ class RegisterPage extends StatelessWidget {
                       NetworkHelper().getData(url: 'topRatedMovies/'),
                       NetworkHelper().getData(url: 'mostUpvotedMovies/'),
                     ]);
-                    Response genres = results[0];                                        
-                    Response topRated = results[1];
-                    Response mostUpvoted = results[2];
+                    final loader = Provider.of<Loader>(context, listen: false);
+                    loader.data.add(response);
+                    loader.data.addAll(results);
                     // ignore: use_build_context_synchronously
-                    Navigator.pushReplacementNamed(context, HomePage.routeName,
-                        arguments: {
-                          "genres": jsonDecode(genres.body),
-                          "topRated": jsonDecode(topRated.body),
-                          "mostUpvoted": jsonDecode(mostUpvoted.body),
-                        });
+                    Navigator.pushReplacementNamed(context, HomePage.routeName);
                   }),
               const SizedBox(
                 height: 20,

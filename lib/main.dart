@@ -10,6 +10,7 @@ import 'package:movie_app/pages/movie_page.dart';
 import 'package:movie_app/pages/register_page.dart';
 import 'package:movie_app/pages/review_page.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:movie_app/providers/loader.dart';
 import 'package:movie_app/providers/movie.dart';
 import 'package:movie_app/providers/user.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +25,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => User(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => User(),
+        ),
+        Provider(create: (context) => Loader(),lazy: false,)
+      ],
+      // create: (context) => User(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData.dark().copyWith(

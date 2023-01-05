@@ -1,62 +1,17 @@
+import 'dart:convert';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:movie_app/pages/home_page.dart';
 import 'dart:async';
 import 'dart:ui';
 
 import 'package:movie_app/pages/loading_page.dart';
-
-class MyWidget extends StatefulWidget {
-  @override
-  _MyWidgetState createState() => _MyWidgetState();
-}
-
-class _MyWidgetState extends State<MyWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              'Suppose this is an app in your Ph_a\'s Screen page.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            OpenContainer(
-              closedBuilder: (_, openContainer) {
-                return Container(
-                  height: 80,
-                  width: 80,
-                  child: Center(
-                    child: Text(
-                      'App Logo',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                );
-              },
-              openColor: Colors.white,
-              closedElevation: 20,
-              closedShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              transitionDuration: Duration(milliseconds: 700),
-              openBuilder: (_, closeContainer) {
-                return SecondPage();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+import 'package:movie_app/pages/login_page.dart';
+import 'package:movie_app/providers/loader.dart';
+import 'package:movie_app/providers/user.dart';
+import 'package:provider/provider.dart';
 
 class SecondPage extends StatefulWidget {
   @override
@@ -73,7 +28,7 @@ class _SecondPageState extends State<SecondPage> {
   bool _g = false;
   bool _h = true;
 
-  final TextStyle initialStyle = TextStyle(
+  final TextStyle initialStyle = const TextStyle(
     fontSize: 30,
     color: Colors.black,
     fontWeight: FontWeight.w600,
@@ -128,13 +83,32 @@ class _SecondPageState extends State<SecondPage> {
         _g = false;
       });
     });
-    Timer(Duration(milliseconds: 4000), () {
-      Navigator.of(context).pushReplacement(
-        ThisIsFadeRoute(
-          route: Loading(),
-          page: Loading(),
-        ),
-      );
+    Timer(Duration(milliseconds: 4000), () async {
+      final loader = Provider.of<Loader>(context, listen: false);
+      int choice = await loader.choice;
+      if (choice == 1) {
+        final results = loader.data;
+        Response user_data = results[0];
+        var data = jsonDecode(user_data.body);
+        if (!mounted) return;
+        Provider.of<User>(context, listen: false).update(
+            id: data['id'],
+            email: data['email'],
+            password: data['password'],
+            name: data['name'],
+            profilePicUrl: data['profile_pic_url']);
+        Navigator.pushReplacement(
+            context, ThisIsFadeRoute(page: HomePage(), route: HomePage()));
+      } else {
+        Navigator.pushReplacement(
+            context, ThisIsFadeRoute(page: LoginPage(), route: LoginPage()));
+      }
+      // Navigator.of(context).pushReplacement(
+      //   ThisIsFadeRoute(
+      //     route: Loading(),
+      //     page: Loading(),
+      //   ),
+      // );
     });
   }
 
@@ -229,7 +203,7 @@ class _SecondPageState extends State<SecondPage> {
                     style: _h ? initialStyle : finalStyle,
                     duration: Duration(seconds: 2),
                     curve: Curves.fastLinearToSlowEaseIn,
-                    child: Text("APP NAME"),
+                    child: Text("Movie App"),
                   )
                 : SizedBox(),
           ),
@@ -243,7 +217,7 @@ class ThisIsFadeRoute extends PageRouteBuilder {
   final Widget page;
   final Widget route;
 
-  ThisIsFadeRoute({required this.page,required this.route})
+  ThisIsFadeRoute({required this.page, required this.route})
       : super(
           pageBuilder: (
             BuildContext context,
@@ -262,26 +236,4 @@ class ThisIsFadeRoute extends PageRouteBuilder {
             child: route,
           ),
         );
-}
-
-class ThirdPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text('HOME PAGE'),
-          centerTitle: true,
-          brightness: Brightness.dark,
-          backgroundColor: Colors.black),
-      body: Center(
-        child: Text(
-          "APP HOME PAGE",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-      ),
-    );
-  }
 }

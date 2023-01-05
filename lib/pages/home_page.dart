@@ -9,6 +9,7 @@ import 'package:http/http.dart';
 import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/pages/movie_page.dart';
+import 'package:movie_app/providers/loader.dart';
 import 'package:movie_app/providers/user.dart';
 import 'package:movie_app/widgets/animated_menu.dart';
 import 'package:movie_app/widgets/custom_text_field2.dart';
@@ -23,11 +24,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final genres = data['genres'];
-    final topRated = data['topRated'];
-    final mostUpvoted = data['mostUpvoted'];
+    final data =Provider.of<Loader>(context,listen: false).data;
+    final genres = jsonDecode(data[1].body);
+    final topRated = jsonDecode(data[2].body);
+    final mostUpvoted = jsonDecode(data[3].body);
     return Scaffold(
       key: _scaffoldKey,
       body: SafeArea(
