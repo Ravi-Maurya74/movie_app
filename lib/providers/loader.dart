@@ -8,14 +8,12 @@ import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
 import 'package:movie_app/helpers/networking.dart';
-import 'package:movie_app/providers/user.dart';
-import 'package:provider/provider.dart';
 
 class Loader {
   late Completer<int> ch;
   List<Response> data = [];
   Loader() {
-    // print('started');
+    debugPrint('started');
     ch = Completer();
     start();
   }
@@ -27,16 +25,16 @@ class Loader {
     final box = GetStorage();
     bool hasUser = box.hasData('user_id');
     if (hasUser) {
-      int user_id = box.read('user_id');
+      int userId = box.read('user_id');
       final results = await Future.wait([
-        NetworkHelper().getData(url: 'identifyUser/$user_id'),
+        NetworkHelper().getData(url: 'identifyUser/$userId'),
         NetworkHelper().getData(url: 'genre/'),
         NetworkHelper().getData(url: 'topRatedMovies/'),
         NetworkHelper().getData(url: 'mostUpvotedMovies/'),
       ]);
       data = results;
       ch.complete(1);
-      print('completed');
+      debugPrint('completed');
       String firstMovie = jsonDecode(results[2].body)[0]['imageUrl'];
       Image image = Image(
         image: CachedNetworkImageProvider(firstMovie),

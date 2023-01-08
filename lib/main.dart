@@ -4,7 +4,6 @@ import 'package:movie_app/pages/add_to_database.dart';
 import 'package:movie_app/pages/animation_page.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/pages/home_page.dart';
-import 'package:movie_app/pages/loading_page.dart';
 import 'package:movie_app/pages/login_page.dart';
 import 'package:movie_app/pages/movie_page.dart';
 import 'package:movie_app/pages/register_page.dart';
@@ -27,9 +26,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => User(),
+        ChangeNotifierProvider(
+          create: (context) => User(),
         ),
-        Provider(create: (context) => Loader(),lazy: false,)
+        Provider(
+          create: (context) => Loader(),
+          lazy: false,
+        )
       ],
       // create: (context) => User(),
       child: MaterialApp(
@@ -60,10 +63,9 @@ class MyApp extends StatelessWidget {
             )),
         // home: HomePage(),
         routes: {
-          '/':(context) => SecondPage(),
+          '/': (context) => const OpeningAnimationsPage(),
           LoginPage.routeName: (context) => LoginPage(),
           RegisterPage.routeName: (context) => RegisterPage(),
-          // MoviePage.routeName: (context) => MoviePage(),
           ReviewPage.routeName: (context) => ReviewPage(),
           HomePage.routeName: (context) => HomePage(),
           FilteredMovies.routeName: (context) => const FilteredMovies(),
@@ -82,6 +84,7 @@ class MyApp extends StatelessWidget {
               },
             );
           }
+          return null;
         },
       ),
     );

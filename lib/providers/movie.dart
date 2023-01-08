@@ -20,36 +20,36 @@ class Movie with ChangeNotifier {
         jsonMap: {"movie_id": data['id'], "cast_id": directorData['id']});
   }
 
-  void toggleLike(int user_id) {
+  void toggleLike(int userId) {
     if (data['upvoted']) {
       data['upvoted'] = false;
       notifyListeners();
       NetworkHelper().postData(
           url: 'downvoteMovie/',
-          jsonMap: {"movie_id": data['id'], "user_id": user_id});
+          jsonMap: {"movie_id": data['id'], "user_id": userId});
     }
     else{
       data['upvoted'] = true;
       notifyListeners();
       NetworkHelper().postData(
           url: 'upvoteMovie/',
-          jsonMap: {"movie_id": data['id'], "user_id": user_id});
+          jsonMap: {"movie_id": data['id'], "user_id": userId});
     }
   }
 
-  void toggleBookmark(int user_id){
+  void toggleBookmark(int userId){
     if (data['bookmarked']) {
       data['bookmarked'] = false;
       notifyListeners();
       NetworkHelper().postData(
           url: 'removeBookmark/',
-          jsonMap: {"movie_id": data['id'], "user_id": user_id});
+          jsonMap: {"movie_id": data['id'], "user_id": userId});
     } else {
       data['bookmarked'] = true;
       notifyListeners();
       NetworkHelper().postData(
           url: 'bookmarkMovie/',
-          jsonMap: {"movie_id": data['id'], "user_id": user_id});
+          jsonMap: {"movie_id": data['id'], "user_id": userId});
     }
   }
 }

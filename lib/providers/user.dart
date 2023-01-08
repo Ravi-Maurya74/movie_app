@@ -6,6 +6,8 @@ class User with ChangeNotifier {
   String password = '';
   String name = '';
   String profilePicUrl = '';
+  int currentMovieid = 0;
+  dynamic popValue;
   void update(
       {required int id,
       required String email,

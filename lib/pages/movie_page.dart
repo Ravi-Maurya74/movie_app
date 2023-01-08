@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -178,10 +180,16 @@ class MoviePage extends StatelessWidget {
                                 child: Text('Reviews'),
                               ),
                               onPressed: () async {
-                                var reviewData = await NetworkHelper().postData(
-                                    url: 'movieReviews/',
-                                    jsonMap: {"movie_id": data['id']});
+                                var reviewData = await NetworkHelper()
+                                    .postData(url: 'movieReviews/', jsonMap: {
+                                  "movie_id": data['id'],
+                                  "user_id":
+                                      Provider.of<User>(context, listen: false)
+                                          .id
+                                });
                                 // print(jsonDecode(review_data.body));
+                                Provider.of<User>(context,listen: false).currentMovieid =
+                                    data['id'];
                                 Navigator.pushNamed(
                                     context, ReviewPage.routeName,
                                     arguments: jsonDecode(reviewData.body));
@@ -198,10 +206,13 @@ class MoviePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: ExtendedFAB(
-          scrollController: scrollController,
-          label: 'Comments',
-          iconData: Icons.message),
+      floatingActionButton: ExtendedOffsetFAB(
+        scrollController: scrollController,
+        label: 'Comments',
+        iconData: Icons.message,
+        changeOffset: 50,
+        onTap: () {},
+      ),
     );
   }
 }

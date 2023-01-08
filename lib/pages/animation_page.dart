@@ -1,24 +1,23 @@
 import 'dart:convert';
 
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:movie_app/pages/home_page.dart';
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:movie_app/pages/loading_page.dart';
 import 'package:movie_app/pages/login_page.dart';
 import 'package:movie_app/providers/loader.dart';
 import 'package:movie_app/providers/user.dart';
 import 'package:provider/provider.dart';
 
-class SecondPage extends StatefulWidget {
+class OpeningAnimationsPage extends StatefulWidget {
+  const OpeningAnimationsPage({super.key});
+
   @override
-  _SecondPageState createState() => _SecondPageState();
+  OpeningAnimationsPageState createState() => OpeningAnimationsPageState();
 }
 
-class _SecondPageState extends State<SecondPage> {
+class OpeningAnimationsPageState extends State<OpeningAnimationsPage> {
   bool _a = false;
   bool _b = false;
   bool _c = false;
@@ -35,7 +34,7 @@ class _SecondPageState extends State<SecondPage> {
     wordSpacing: 2,
   );
 
-  final TextStyle finalStyle = TextStyle(
+  final TextStyle finalStyle = const TextStyle(
     fontSize: 30,
     color: Colors.white,
     fontWeight: FontWeight.w600,
@@ -45,51 +44,51 @@ class _SecondPageState extends State<SecondPage> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 500), () {
+    Timer(const Duration(milliseconds: 500), () {
       setState(() {
         _g = true;
         _a = true;
         _h = !_h;
       });
     });
-    Timer(Duration(seconds: 1), () {
+    Timer(const Duration(seconds: 1), () {
       setState(() {
         _b = true;
         _h = !_h;
       });
     });
-    Timer(Duration(milliseconds: 1500), () {
+    Timer(const Duration(milliseconds: 1500), () {
       setState(() {
         _c = true;
         _h = !_h;
       });
     });
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       setState(() {
         _d = true;
         _h = !_h;
       });
     });
-    Timer(Duration(milliseconds: 2500), () {
+    Timer(const Duration(milliseconds: 2500), () {
       setState(() {
         _e = true;
         _h = !_h;
       });
     });
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       setState(() {
         _f = true;
         _h = !_h;
         _g = false;
       });
     });
-    Timer(Duration(milliseconds: 4000), () async {
+    Timer(const Duration(milliseconds: 4000), () async {
       final loader = Provider.of<Loader>(context, listen: false);
       int choice = await loader.choice;
       if (choice == 1) {
         final results = loader.data;
-        Response user_data = results[0];
-        var data = jsonDecode(user_data.body);
+        Response userData = results[0];
+        var data = jsonDecode(userData.body);
         if (!mounted) return;
         Provider.of<User>(context, listen: false).update(
             id: data['id'],
@@ -100,15 +99,10 @@ class _SecondPageState extends State<SecondPage> {
         Navigator.pushReplacement(
             context, ThisIsFadeRoute(page: HomePage(), route: HomePage()));
       } else {
+        if (!mounted) return;
         Navigator.pushReplacement(
             context, ThisIsFadeRoute(page: LoginPage(), route: LoginPage()));
       }
-      // Navigator.of(context).pushReplacement(
-      //   ThisIsFadeRoute(
-      //     route: Loading(),
-      //     page: Loading(),
-      //   ),
-      // );
     });
   }
 
@@ -119,18 +113,18 @@ class _SecondPageState extends State<SecondPage> {
 
   @override
   Widget build(BuildContext context) {
-    double _height = MediaQuery.of(context).size.height;
-    double _width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: Stack(
         children: [
           Center(
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 2500),
+              duration: const Duration(milliseconds: 2500),
               curve: Curves.fastLinearToSlowEaseIn,
-              height: _a ? _height : 0,
-              width: _a ? _width : 0,
+              height: _a ? height : 0,
+              width: _a ? width : 0,
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(_a ? 0 : 99),
@@ -139,10 +133,10 @@ class _SecondPageState extends State<SecondPage> {
           ),
           Center(
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 2500),
+              duration: const Duration(milliseconds: 2500),
               curve: Curves.fastLinearToSlowEaseIn,
-              height: _b ? _height : 0,
-              width: _b ? _width : 0,
+              height: _b ? height : 0,
+              width: _b ? width : 0,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(_b ? 0 : 99),
@@ -151,10 +145,10 @@ class _SecondPageState extends State<SecondPage> {
           ),
           Center(
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 2500),
+              duration: const Duration(milliseconds: 2500),
               curve: Curves.fastLinearToSlowEaseIn,
-              height: _c ? _height : 0,
-              width: _c ? _width : 0,
+              height: _c ? height : 0,
+              width: _c ? width : 0,
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(_c ? 0 : 99),
@@ -163,10 +157,10 @@ class _SecondPageState extends State<SecondPage> {
           ),
           Center(
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 2500),
+              duration: const Duration(milliseconds: 2500),
               curve: Curves.fastLinearToSlowEaseIn,
-              height: _d ? _height : 0,
-              width: _d ? _width : 0,
+              height: _d ? height : 0,
+              width: _d ? width : 0,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(_d ? 0 : 99),
@@ -175,10 +169,10 @@ class _SecondPageState extends State<SecondPage> {
           ),
           Center(
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 2500),
+              duration: const Duration(milliseconds: 2500),
               curve: Curves.fastLinearToSlowEaseIn,
-              height: _e ? _height : 0,
-              width: _e ? _width : 0,
+              height: _e ? height : 0,
+              width: _e ? width : 0,
               decoration: BoxDecoration(
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(_e ? 0 : 99),
@@ -187,10 +181,10 @@ class _SecondPageState extends State<SecondPage> {
           ),
           Center(
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 2200),
+              duration: const Duration(milliseconds: 2200),
               curve: Curves.fastLinearToSlowEaseIn,
-              height: _f ? _height : 0,
-              width: _f ? _width : 0,
+              height: _f ? height : 0,
+              width: _f ? width : 0,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(_f ? 0 : 99),
@@ -201,11 +195,11 @@ class _SecondPageState extends State<SecondPage> {
             child: _g
                 ? AnimatedDefaultTextStyle(
                     style: _h ? initialStyle : finalStyle,
-                    duration: Duration(seconds: 2),
+                    duration: const Duration(seconds: 2),
                     curve: Curves.fastLinearToSlowEaseIn,
-                    child: Text("Movie App"),
+                    child: const Text("Movie App"),
                   )
-                : SizedBox(),
+                : const SizedBox(),
           ),
         ],
       ),
