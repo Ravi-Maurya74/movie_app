@@ -6,7 +6,7 @@ class NetworkHelper {
   // static String baseUrl = 'http://192.168.1.4:8000/api/';
 
   Future<Response> getData({required String url}) async {
-    final response = await get(Uri.parse(baseUrl + url));
+    final response = await get(Uri.parse(baseUrl + url),);
     return response;
   }
 
@@ -19,5 +19,24 @@ class NetworkHelper {
       body: jsonString,
     );
     return response;
+  }
+
+  Future<bool> validateImage(String imageUrl) async {
+    Response res;
+    try {
+      res = await get(Uri.parse(imageUrl));
+    } catch (e) {
+      return false;
+    }
+
+    if (res.statusCode != 200) return false;
+    Map<String, dynamic> data = res.headers;
+    return checkIfImage(data['content-type']);
+  }
+  bool checkIfImage(String param) {
+    if (param == 'image/jpeg' || param == 'image/png' || param == 'image/gif'|| param == 'image/jpg') {
+      return true;
+    }
+    return false;
   }
 }

@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data =Provider.of<Loader>(context,listen: false).data;
+    final data = Provider.of<Loader>(context, listen: false).data;
     final genres = jsonDecode(data[1].body);
     final topRated = jsonDecode(data[2].body);
     final mostUpvoted = jsonDecode(data[3].body);
@@ -81,8 +81,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-
-
 class RowMovieWidget extends StatelessWidget {
   final List<dynamic> data;
   final String title;
@@ -112,7 +110,8 @@ class RowMovieWidget extends StatelessWidget {
                                   Provider.of<User>(context, listen: false).id
                             });
                         Navigator.pushNamed(context, MoviePage.routeName,
-                            arguments: jsonDecode(movieData.body));
+                            arguments:
+                                jsonDecode(utf8.decode(movieData.bodyBytes)));
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -287,7 +286,7 @@ class _CenterImageState extends State<CenterImage> {
           "user_id": Provider.of<User>(context, listen: false).id
         });
         Navigator.pushNamed(context, MoviePage.routeName,
-            arguments: jsonDecode(movieData.body));
+            arguments: jsonDecode(utf8.decode(movieData.bodyBytes)));
       },
       child: Stack(
         children: [

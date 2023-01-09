@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/pages/movie_page.dart';
@@ -78,8 +79,10 @@ class CustomTextField2 extends StatelessWidget {
                   imageUrl: itemData['imageUrl'],
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       Center(
-                    child: CircularProgressIndicator(
-                        value: downloadProgress.progress),
+                    child: LoadingAnimationWidget.flickr(
+                        leftDotColor: Colors.white,
+                        rightDotColor: Colors.amber,
+                        size: 20),
                   ),
                   errorWidget: (context, url, error) {
                     return const Icon(Icons.person);
@@ -98,7 +101,7 @@ class CustomTextField2 extends StatelessWidget {
                 ),
               );
             },
-            onSuggestionSelected: (suggestion) async{
+            onSuggestionSelected: (suggestion) async {
               Response movieData = await NetworkHelper()
                   .postData(url: 'movieDetails/', jsonMap: {
                 "movie_id": suggestion['id'],

@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:like_button/like_button.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/add_review_page.dart';
 import 'package:movie_app/providers/user.dart';
@@ -155,9 +156,9 @@ class ReviewCard extends StatelessWidget {
                           imageUrl: formatProfilePicUrl(
                               data['profile_pic_url'] as String),
                           progressIndicatorBuilder:
-                              (context, url, downloadProgress) => const Center(
-                            child: Icon(Icons.person),
-                          ),
+                              (context, url, downloadProgress) =>
+                                  LoadingAnimationWidget.beat(
+                                      color: Colors.amber, size: 20),
                           errorWidget: (context, url, error) {
                             return const Icon(Icons.person);
                           },

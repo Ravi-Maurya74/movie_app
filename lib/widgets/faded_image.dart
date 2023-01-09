@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class FadedImage extends StatelessWidget {
   const FadedImage({
@@ -23,8 +24,10 @@ class FadedImage extends StatelessWidget {
             imageUrl: url,
             progressIndicatorBuilder: (context, url, downloadProgress) =>
                 Center(
-              child:
-                  CircularProgressIndicator(value: downloadProgress.progress),
+              child: LoadingAnimationWidget.flickr(
+                  leftDotColor: Colors.white,
+                  rightDotColor: Colors.amber,
+                  size: 60),
             ),
             errorWidget: (context, url, error) {
               return Image.asset('default.jpg');

@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/add_cast_page.dart';
 import 'package:movie_app/pages/review_page.dart';
@@ -188,8 +189,8 @@ class MoviePage extends StatelessWidget {
                                           .id
                                 });
                                 // print(jsonDecode(review_data.body));
-                                Provider.of<User>(context,listen: false).currentMovieid =
-                                    data['id'];
+                                Provider.of<User>(context, listen: false)
+                                    .currentMovieid = data['id'];
                                 Navigator.pushNamed(
                                     context, ReviewPage.routeName,
                                     arguments: jsonDecode(reviewData.body));
@@ -311,10 +312,7 @@ class SingleCast extends StatelessWidget {
               child: CachedNetworkImage(
                 imageUrl: e['image'],
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Center(
-                  child: CircularProgressIndicator(
-                      value: downloadProgress.progress),
-                ),
+                    LoadingAnimationWidget.beat(color: Colors.amber, size: 20),
                 errorWidget: (context, url, error) {
                   return Image.asset('default.jpg');
                 },

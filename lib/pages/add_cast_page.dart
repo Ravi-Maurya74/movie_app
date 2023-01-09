@@ -236,7 +236,8 @@ class SearchWidget extends StatelessWidget {
               var results = await NetworkHelper()
                   .postData(url: 'searchCast/', jsonMap: {"name": pattern});
               // print(jsonDecode(results.body));
-              return jsonDecode(results.body) as List<dynamic>;
+              return jsonDecode(utf8.decode(results.bodyBytes))
+                  as List<dynamic>;
             },
             itemBuilder: (context, itemData) {
               return ListTile(
