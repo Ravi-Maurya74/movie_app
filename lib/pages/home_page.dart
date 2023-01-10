@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:http/http.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/pages/movie_page.dart';
@@ -127,8 +128,10 @@ class RowMovieWidget extends StatelessWidget {
                               imageUrl: e["imageUrl"] as String,
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) => Center(
-                                child: CircularProgressIndicator(
-                                    value: downloadProgress.progress),
+                                child: LoadingAnimationWidget.flickr(
+                                    leftDotColor: Colors.white,
+                                    rightDotColor: Colors.amber,
+                                    size: 60),
                               ),
                               errorWidget: (context, url, error) {
                                 return Image.asset('default.jpg');

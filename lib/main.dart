@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/pages/add_cast_page.dart';
+import 'package:movie_app/pages/add_movie_page.dart';
 import 'package:movie_app/pages/add_to_database.dart';
 import 'package:movie_app/pages/animation_page.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
@@ -66,11 +67,12 @@ class MyApp extends StatelessWidget {
           '/': (context) => const OpeningAnimationsPage(),
           LoginPage.routeName: (context) => LoginPage(),
           RegisterPage.routeName: (context) => RegisterPage(),
-          ReviewPage.routeName: (context) => ReviewPage(),
+          ReviewPage.routeName: (context) => const ReviewPage(),
           HomePage.routeName: (context) => HomePage(),
           FilteredMovies.routeName: (context) => const FilteredMovies(),
           AddCast.routeName: (context) => AddCast(),
           AddToDatabase.routeName: (context) => AddToDatabase(),
+          AddMoviePage.routeName:(context) => AddMoviePage(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == MoviePage.routeName) {

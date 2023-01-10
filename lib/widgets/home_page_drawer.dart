@@ -1,4 +1,8 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:movie_app/pages/add_movie_page.dart';
 
 class HomePageDrawer extends StatelessWidget {
   HomePageDrawer({
@@ -37,7 +41,9 @@ class HomePageDrawer extends StatelessWidget {
             'Add movie',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, AddMoviePage.routeName);
+          },
         ),
         ListTile(
           leading: const Icon(
@@ -48,7 +54,17 @@ class HomePageDrawer extends StatelessWidget {
             'Log out',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          onTap: () {},
+          onTap: () {
+            CoolAlert.show(
+              context: context,
+              type: CoolAlertType.confirm,
+              confirmBtnText: 'Confirm',
+              onConfirmBtnTap: () {
+                GetStorage().remove('user_id');
+                SystemNavigator.pop();
+              },
+            );
+          },
         ),
       ]),
     );

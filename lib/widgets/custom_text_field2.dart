@@ -108,7 +108,7 @@ class CustomTextField2 extends StatelessWidget {
                 "user_id": Provider.of<User>(context, listen: false).id
               });
               Navigator.pushNamed(context, MoviePage.routeName,
-                  arguments: jsonDecode(movieData.body));
+                  arguments: jsonDecode(utf8.decode(movieData.bodyBytes)));
             },
           )
 
