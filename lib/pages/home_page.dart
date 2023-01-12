@@ -128,10 +128,14 @@ class RowMovieWidget extends StatelessWidget {
                               imageUrl: e["imageUrl"] as String,
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) => Center(
-                                child: LoadingAnimationWidget.flickr(
-                                    leftDotColor: Colors.white,
-                                    rightDotColor: Colors.amber,
-                                    size: 60),
+                                child: SizedBox(
+                                  height: 300,
+                                  width: 200,
+                                  child: LoadingAnimationWidget.flickr(
+                                      leftDotColor: Colors.white,
+                                      rightDotColor: Colors.amber,
+                                      size: 60),
+                                ),
                               ),
                               errorWidget: (context, url, error) {
                                 return Image.asset('default.jpg');

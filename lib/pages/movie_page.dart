@@ -193,12 +193,15 @@ class MoviePage extends StatelessWidget {
                                     .currentMovieid = data['id'];
                                 Navigator.pushNamed(
                                     context, ReviewPage.routeName,
-                                    arguments: jsonDecode(reviewData.body));
+                                    arguments: jsonDecode(utf8.decode(reviewData.bodyBytes)));
                               },
                             ),
                           )),
                         ],
-                      )
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                     ],
                   ),
                 ),

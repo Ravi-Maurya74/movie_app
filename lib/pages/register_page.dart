@@ -28,25 +28,19 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var dimensions = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: dimensions.height,
-          width: dimensions.width,
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: dimensions.height * 0.1,
-              ),
+              const SizedBox(height: 50),
               Text('Create new account',
                   style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(
                 height: 10,
               ),
               const Text('Please fill in the form to continue'),
-              SizedBox(
-                height: dimensions.height * 0.1,
-              ),
+              const SizedBox(height: 70),
               CustomTextField(
                 label: 'Full Name',
                 iconData: Icons.person,
@@ -71,17 +65,15 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Tooltip(
-                triggerMode: TooltipTriggerMode.tap,
-                message: 'URL of a web-image or a drive link',
-                child: CustomTextField(
-                  label: 'Profile pic url',
-                  iconData: Icons.face_unlock_outlined,
-                  textEditingController: profilePicController,
-                  hint: 'Optional',
-                ),
+              CustomTextField(
+                label: 'Profile pic url',
+                iconData: Icons.face_unlock_outlined,
+                textEditingController: profilePicController,
+                hint: 'Optional, can add later too..',
               ),
-              const Spacer(),
+              const SizedBox(
+                height: 70,
+              ),
               CustomButton(
                   dimensions: dimensions,
                   label: 'Sign Up',
@@ -158,9 +150,6 @@ class RegisterPage extends StatelessWidget {
                     ),
                   )
                 ],
-              ),
-              SizedBox(
-                height: dimensions.height * 0.08,
               ),
             ],
           ),

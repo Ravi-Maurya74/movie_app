@@ -169,7 +169,8 @@ class _AddReviewPageState extends State<AddReviewPage> {
                                             listen: false)
                                         .id
                                   });
-                                  reviewData = jsonDecode(reviews.body);
+                                  reviewData = jsonDecode(
+                                      utf8.decode(reviews.bodyBytes));
                                   Navigator.pop(context);
                                   CoolAlert.show(
                                     context: context,

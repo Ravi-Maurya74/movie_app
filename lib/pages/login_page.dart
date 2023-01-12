@@ -26,10 +26,8 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var dimensions = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: dimensions.height,
-          width: dimensions.width,
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -57,7 +55,9 @@ class LoginPage extends StatelessWidget {
                 iconData: Icons.lock,
                 textEditingController: passwordController,
               ),
-              const Spacer(),
+              SizedBox(
+                height: dimensions.height * 0.25,
+              ),
               CustomButton(
                   dimensions: dimensions,
                   label: 'Sign In',

@@ -291,14 +291,34 @@ class _AddMoviePageState extends State<AddMoviePage> {
                           const Spacer(),
                           ElevatedButton(
                               onPressed: () async {
+                                FocusScope.of(context).unfocus();
+                                CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.loading,
+                                  text: 'Validating...',
+                                  barrierDismissible: false,
+                                );
                                 await Future.wait([
                                   validatePosterUrl(),
                                   validateCardUrl(),
                                   validateTrailerUrl(),
                                 ]);
+                                if (!mounted) return;
+                                Navigator.pop(context);
                                 if (_formKey.currentState!.validate()) {
+                                  CoolAlert.show(
+                                    context: context,
+                                    type: CoolAlertType.success,
+                                    text:
+                                        'Preview loaded. The images will appear exactly as shown below in preview. Make sure they are good fit before adding them finally.',
+                                  );
                                   showPreview();
                                 } else {
+                                  CoolAlert.show(
+                                    context: context,
+                                    type: CoolAlertType.error,
+                                    text: 'Please provide valid data.',
+                                  );
                                   hidePreview();
                                 }
                               },
