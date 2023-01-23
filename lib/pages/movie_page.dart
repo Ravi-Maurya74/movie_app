@@ -93,7 +93,7 @@ class MoviePage extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           const Spacer(),
-                          LikeBookmarkWidget(),
+                          const LikeBookmarkWidget(),
                         ],
                       ),
                       const SizedBox(

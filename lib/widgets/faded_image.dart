@@ -40,7 +40,7 @@ class FadedImage extends StatelessWidget {
           height: height + 1,
           child: Column(
             children: [
-              Spacer(),
+              const Spacer(),
               Container(
                 height: fadeHeight,
                 width: double.infinity,

@@ -6,12 +6,13 @@ import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:movie_app/helpers/networking.dart';
 import 'package:movie_app/pages/add_movie_page.dart';
+import 'package:movie_app/pages/change_account_page.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/providers/user.dart';
 import 'package:provider/provider.dart';
 
 class HomePageDrawer extends StatelessWidget {
-  HomePageDrawer({
+  const HomePageDrawer({
     Key? key,
   }) : super(key: key);
 
@@ -36,7 +37,9 @@ class HomePageDrawer extends StatelessWidget {
             'Account',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, ChangeAccount.routeName);
+          },
         ),
         ListTile(
           leading: const Icon(

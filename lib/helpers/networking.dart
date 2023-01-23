@@ -2,7 +2,7 @@ import 'package:http/http.dart';
 import 'dart:convert';
 
 class NetworkHelper {
-  static String baseUrl = 'http://122.163.248.34:8000/api/';
+  static String baseUrl = 'http://neutrinonda.pythonanywhere.com/api/';
   // static String baseUrl = 'http://192.168.1.4:8000/api/';
 
   Future<Response> getData({required String url}) async {

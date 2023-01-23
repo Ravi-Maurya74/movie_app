@@ -3,6 +3,7 @@ import 'package:movie_app/pages/add_cast_page.dart';
 import 'package:movie_app/pages/add_movie_page.dart';
 import 'package:movie_app/pages/add_to_database.dart';
 import 'package:movie_app/pages/animation_page.dart';
+import 'package:movie_app/pages/change_account_page.dart';
 import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/pages/home_page.dart';
 import 'package:movie_app/pages/login_page.dart';
@@ -70,9 +71,10 @@ class MyApp extends StatelessWidget {
           ReviewPage.routeName: (context) => const ReviewPage(),
           HomePage.routeName: (context) => HomePage(),
           FilteredMovies.routeName: (context) => const FilteredMovies(),
-          AddCast.routeName: (context) => AddCast(),
-          AddToDatabase.routeName: (context) => AddToDatabase(),
-          AddMoviePage.routeName:(context) => AddMoviePage(),
+          AddCast.routeName: (context) => const AddCast(),
+          AddToDatabase.routeName: (context) => const AddToDatabase(),
+          AddMoviePage.routeName: (context) => const AddMoviePage(),
+          ChangeAccount.routeName: (context) => ChangeAccount(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == MoviePage.routeName) {

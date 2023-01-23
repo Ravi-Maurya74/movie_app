@@ -9,7 +9,7 @@ import '../helpers/networking.dart';
 
 class AddCast extends StatefulWidget {
   static const routeName = '/add_cast';
-  AddCast({super.key});
+  const AddCast({super.key});
 
   @override
   State<AddCast> createState() => _AddCastState();
@@ -40,7 +40,7 @@ class _AddCastState extends State<AddCast> {
                   // SizedBox(
                   //   height: 100,
                   // ),
-                  CreateNewCast()
+                  const CreateNewCast()
                 ],
               ),
             ],
@@ -76,7 +76,7 @@ class CreateNewCast extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamed(context, AddToDatabase.routeName);
                   },
-                  child: Text('Add to database'))
+                  child: const Text('Add to database'))
             ],
           ),
           const SizedBox(
@@ -116,7 +116,7 @@ class ResultWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: (data == null)
-          ? SizedBox(
+          ? const SizedBox(
               height: 200,
             )
           : Padding(

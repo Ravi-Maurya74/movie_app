@@ -107,13 +107,13 @@ class _ReviewPageState extends State<ReviewPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.create),
-                if (_extended) Text('Review'),
+                const Icon(Icons.create),
+                if (_extended) const Text('Review'),
               ],
             ),
           ),
         ),
-        openBuilder: (context, action) => AddReviewPage(),
+        openBuilder: (context, action) => const AddReviewPage(),
       ),
     );
   }

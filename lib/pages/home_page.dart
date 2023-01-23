@@ -12,7 +12,6 @@ import 'package:movie_app/pages/filtered_movies.dart';
 import 'package:movie_app/pages/movie_page.dart';
 import 'package:movie_app/providers/loader.dart';
 import 'package:movie_app/providers/user.dart';
-import 'package:movie_app/widgets/animated_menu.dart';
 import 'package:movie_app/widgets/custom_text_field2.dart';
 import 'package:movie_app/widgets/faded_image.dart';
 import 'package:movie_app/widgets/home_page_drawer.dart';
@@ -58,7 +57,9 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              CenterImage(data: topRated),
+              CenterImage(
+                  data: (topRated as List<dynamic>)
+                      .sublist(0, min(10, (topRated).length))),
               Container(
                 margin:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -96,61 +97,80 @@ class RowMovieWidget extends StatelessWidget {
           title,
           style: Theme.of(context).textTheme.titleLarge,
         ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          physics: const BouncingScrollPhysics(),
-          child: Row(
-            children: data
-                .map((e) => Bounceable(
-                      onTap: () async {
-                        Response movieData = await NetworkHelper().postData(
-                            url: 'movieDetails/',
-                            jsonMap: {
-                              "movie_id": e['id'],
-                              "user_id":
-                                  Provider.of<User>(context, listen: false).id
-                            });
-                        Navigator.pushNamed(context, MoviePage.routeName,
-                            arguments:
-                                jsonDecode(utf8.decode(movieData.bodyBytes)));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            // margin: const EdgeInsets.symmetric(
-                            //     horizontal: 10, vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: CachedNetworkImage(
-                              imageUrl: e["imageUrl"] as String,
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Center(
-                                child: SizedBox(
-                                  height: 300,
-                                  width: 200,
-                                  child: LoadingAnimationWidget.flickr(
-                                      leftDotColor: Colors.white,
-                                      rightDotColor: Colors.amber,
-                                      size: 60),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) {
-                                return Image.asset('default.jpg');
-                              },
-                              height: 300,
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ))
-                .toList(),
+        SizedBox(
+          height: 320,
+          child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) => SingleRowMovie(
+              e: data[index],
+              key: ValueKey(data[index]['id']),
+            ),
+            itemCount: data.length,
+            scrollDirection: Axis.horizontal,
           ),
         ),
+        // SingleChildScrollView(
+        //   scrollDirection: Axis.horizontal,
+        //   physics: const BouncingScrollPhysics(),
+        //   child: Row(
+        //     children: data.map((e) => SingleRowMovie(e: e,)).toList(),
+        //   ),
+        // ),
       ],
+    );
+  }
+}
+
+class SingleRowMovie extends StatelessWidget {
+  const SingleRowMovie({
+    required this.e,
+    Key? key,
+  }) : super(key: key);
+  final dynamic e;
+
+  @override
+  Widget build(BuildContext context) {
+    return Bounceable(
+      onTap: () async {
+        Response movieData = await NetworkHelper().postData(
+            url: 'movieDetails/',
+            jsonMap: {
+              "movie_id": e['id'],
+              "user_id": Provider.of<User>(context, listen: false).id
+            });
+        Navigator.pushNamed(context, MoviePage.routeName,
+            arguments: jsonDecode(utf8.decode(movieData.bodyBytes)));
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            // margin: const EdgeInsets.symmetric(
+            //     horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            child: CachedNetworkImage(
+              imageUrl: e["imageUrl"] as String,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Center(
+                child: SizedBox(
+                  height: 300,
+                  width: 200,
+                  child: LoadingAnimationWidget.flickr(
+                      leftDotColor: Colors.white,
+                      rightDotColor: Colors.amber,
+                      size: 60),
+                ),
+              ),
+              errorWidget: (context, url, error) {
+                return Image.asset('default.jpg');
+              },
+              height: 300,
+              fit: BoxFit.fitHeight,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -168,7 +188,6 @@ class _SelectorChipsState extends State<SelectorChips> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     for (int i = 0; i < widget.genres.length; i++) {
       _selected[widget.genres[i]['id'] as int] = false;
@@ -260,6 +279,13 @@ class _CenterImageState extends State<CenterImage> {
         setState(() {
           index = (index + 1) % widget.data.length;
         });
+        // int nextIndex = (index + 1) % widget.data.length;
+        // Image image = Image(
+        //   image: CachedNetworkImageProvider(
+        //       widget.data[nextIndex]['imageUrl'] as String),
+        //   fit: BoxFit.cover,
+        // );
+        // precacheImage(image.image, context);
       },
     );
     super.initState();

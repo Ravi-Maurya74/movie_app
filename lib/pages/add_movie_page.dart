@@ -453,7 +453,7 @@ class _AddMoviePageState extends State<AddMoviePage> {
                                 );
                               }
                             : null,
-                        child: Text('Add Movie'),
+                        child: const Text('Add Movie'),
                       )
                     ],
                   ),
@@ -495,7 +495,14 @@ class SingleTextField extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(width: 130, child: Text(label)),
+          Column(
+            children: [
+              const SizedBox(
+                height: 8,
+              ),
+              SizedBox(width: 130, child: Text(label)),
+            ],
+          ),
           const SizedBox(
             width: 20,
           ),

@@ -7,7 +7,7 @@ import 'package:validators/validators.dart';
 
 class AddToDatabase extends StatefulWidget {
   static const routeName = 'add_to_database/';
-  AddToDatabase({super.key});
+  const AddToDatabase({super.key});
 
   @override
   State<AddToDatabase> createState() => _AddToDatabaseState();
@@ -106,7 +106,7 @@ class _AddToDatabaseState extends State<AddToDatabase> {
                                 minLines: 7,
                                 maxLines: null,
                                 keyboardType: TextInputType.multiline,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   border: InputBorder.none,
                                 ),
                               ),
@@ -158,7 +158,7 @@ class _AddToDatabaseState extends State<AddToDatabase> {
                                                     color: Colors.amber,
                                                     size: 20),
                                         errorWidget: (context, url, error) {
-                                          return Icon(Icons.error);
+                                          return const Icon(Icons.error);
                                         },
                                         height: 100,
                                         width: 100,

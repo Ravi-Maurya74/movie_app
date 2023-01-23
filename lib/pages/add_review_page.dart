@@ -5,12 +5,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:movie_app/helpers/networking.dart';
-import 'package:movie_app/providers/movie.dart';
 import 'package:movie_app/providers/user.dart';
 import 'package:provider/provider.dart';
 
 class AddReviewPage extends StatefulWidget {
-  AddReviewPage({super.key});
+  const AddReviewPage({super.key});
 
   @override
   State<AddReviewPage> createState() => _AddReviewPageState();
