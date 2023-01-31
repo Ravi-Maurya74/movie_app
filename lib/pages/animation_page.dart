@@ -197,7 +197,10 @@ class OpeningAnimationsPageState extends State<OpeningAnimationsPage> {
                     style: _h ? initialStyle : finalStyle,
                     duration: const Duration(seconds: 2),
                     curve: Curves.fastLinearToSlowEaseIn,
-                    child: const Text("Movie App"),
+                    child: const Text(
+                      "CineCritique",
+                      style: TextStyle(fontFamily: 'Canterbury', fontSize: 40),
+                    ),
                   )
                 : const SizedBox(),
           ),

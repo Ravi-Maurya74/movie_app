@@ -78,7 +78,7 @@ class MovieCard extends StatelessWidget {
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     SizedBox(
                   height: 220,
-                  width: 130,
+                  width: 150,
                   child: Center(
                     child: LoadingAnimationWidget.flickr(
                         leftDotColor: Colors.white,
@@ -87,10 +87,14 @@ class MovieCard extends StatelessWidget {
                   ),
                 ),
                 errorWidget: (context, url, error) {
-                  return Image.asset('default.jpg');
+                  return SizedBox(
+                    height: 220,
+                    width: 150,
+                  );
                 },
                 height: 220,
-                fit: BoxFit.fitHeight,
+                width: 150,
+                fit: BoxFit.fill,
               ),
             ),
             const SizedBox(

@@ -193,7 +193,8 @@ class MoviePage extends StatelessWidget {
                                     .currentMovieid = data['id'];
                                 Navigator.pushNamed(
                                     context, ReviewPage.routeName,
-                                    arguments: jsonDecode(utf8.decode(reviewData.bodyBytes)));
+                                    arguments: jsonDecode(
+                                        utf8.decode(reviewData.bodyBytes)));
                               },
                             ),
                           )),
@@ -210,13 +211,13 @@ class MoviePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: ExtendedOffsetFAB(
-        scrollController: scrollController,
-        label: 'Comments',
-        iconData: Icons.message,
-        changeOffset: 50,
-        onTap: () {},
-      ),
+      // floatingActionButton: ExtendedOffsetFAB(
+      //   scrollController: scrollController,
+      //   label: 'Comments',
+      //   iconData: Icons.message,
+      //   changeOffset: 50,
+      //   onTap: () {},
+      // ),
     );
   }
 }

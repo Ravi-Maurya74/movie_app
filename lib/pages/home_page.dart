@@ -107,6 +107,8 @@ class RowMovieWidget extends StatelessWidget {
             ),
             itemCount: data.length,
             scrollDirection: Axis.horizontal,
+            prototypeItem: SingleRowMovie(e: data[0]),
+            cacheExtent: 2000,
           ),
         ),
         // SingleChildScrollView(
@@ -163,10 +165,14 @@ class SingleRowMovie extends StatelessWidget {
                 ),
               ),
               errorWidget: (context, url, error) {
-                return Image.asset('default.jpg');
+                return const SizedBox(
+                  height: 300,
+                  width: 200,
+                );
               },
               height: 300,
-              fit: BoxFit.fitHeight,
+              width: 200,
+              fit: BoxFit.fill,
             ),
           ),
         ),
@@ -323,7 +329,7 @@ class _CenterImageState extends State<CenterImage> {
       },
       child: Stack(
         children: [
-          FadedImage(
+          FadedImage2(
             height: 600,
             url: widget.data[index]['imageUrl'] as String,
             fadeHeight: 200,

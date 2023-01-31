@@ -361,7 +361,8 @@ class _AddMoviePageState extends State<AddMoviePage> {
                                             return Image.asset('default.jpg');
                                           },
                                           height: 300,
-                                          fit: BoxFit.fitHeight,
+                                          width: 200,
+                                          fit: BoxFit.fill,
                                         ),
                                       ),
                                     ),
