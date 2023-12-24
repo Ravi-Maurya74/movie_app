@@ -14,7 +14,6 @@ import 'package:movie_app/providers/user.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:movie_app/widgets/extended_fab.dart';
 import 'package:movie_app/widgets/faded_image.dart';
 import 'package:movie_app/widgets/fade_on_scroll.dart';
 
